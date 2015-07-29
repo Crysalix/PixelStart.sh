@@ -15,7 +15,25 @@ path=$(pwd)
 MMIN='1G'
 MMAX='4G'
 
+#Functions
+function root_check(){
+    if [ $(whoami) = "root" ]; then
+        for ((r=0 ; r<5 ; r++))
+            do
+                echo -e "$warning Run Minecraft Server as root is not recommended !"
+                sleep 0.5
+        done
+        read -p "Do you want to continue [y/N]? " yn
+        yn=$(echo $yn | awk '{print tolower($0)}')
+        if [ -z $yn ] || [ $yn != "y" ]; then
+            echo Abort.
+            exit 1
+        fi
+    fi
+}
+
 function mc_start(){
+    root_check
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
         then
         echo -e "$warn $service is running !"
