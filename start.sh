@@ -50,6 +50,17 @@ function mc_start(){
     fi
 }
 
+function mc_startmc(){
+    echo -e "$info Starting $service..."
+    bash -c "screen -dmS $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $path/$service nogui"
+    if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+    then
+        echo -e "$ok $service started !"
+    else
+        echo -e "$fail Can't start $service !"
+    fi
+}
+
 function mc_stop(){
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
     then
@@ -66,6 +77,16 @@ function mc_stop(){
         fi
     else
         echo -e "$warn $service is not running !"
+    fi
+}
+
+function mc_restart(){
+    if [ -z $who ] || [ $who != "mc" ]; then
+        mc_stop
+        mc_start
+    elif [ $who = "mc" ]; then
+        echo "Restart Server !" >> log.txt
+        mc_startmc
     fi
 }
 
