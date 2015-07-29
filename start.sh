@@ -95,8 +95,11 @@ case $1 in
         mc_start;;
     stop)
         mc_stop;;
+    restart)
+        who=$2
+        mc_restart;;
     *)
-        echo -e "Usage: $0 {start|stop}"
+        echo -e "Usage: $0 {start|stop|restart}"
         exit 1;;
 esac
 
