@@ -6,11 +6,11 @@ warn="[\e[1;33mWARN\e[0;39m]"
 fail="[\e[0;31mFAIL\e[0;39m]"
 info="[\e[0;36mINFO\e[0;39m]"
 warning="\e[0;31mWARNING!\e[0;39m"
-threedot="[\e[....]"
+threedot="[....]"
 
 #Settings
 mcscreen='mcserver'
-service='spigot.jar'
+service='spigot-1.8.8.jar'
 path=$(pwd)
 MMIN='1G'
 MMAX='4G'
