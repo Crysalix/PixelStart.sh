@@ -85,7 +85,6 @@ function mc_restart(){
         mc_stop
         mc_start
     elif [ $who = "mc" ]; then
-        echo "Restart Server !" >> log.txt
         mc_startmc
     fi
 }
