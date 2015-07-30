@@ -1,5 +1,6 @@
 # PixelStart.sh
 Simple start.sh for Minecraft servers
+Support the /restart command ingame
 
 # Commands :
 
