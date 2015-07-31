@@ -89,6 +89,13 @@ function mc_restart(){
     fi
 }
 
+function mc_log(){
+    echo -e "$warn Ctrl + C = quit"
+    sleep 1
+    cd $path/logs
+    tail -f latest.log
+}
+
 case $1 in
     start)
         mc_start;;
