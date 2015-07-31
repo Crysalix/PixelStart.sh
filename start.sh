@@ -104,8 +104,10 @@ case $1 in
     restart)
         who=$2
         mc_restart;;
+    log)
+        mc_log;;
     *)
-        echo -e "Usage: $0 {start|stop|restart}"
+        echo -e "Usage: $0 {start|stop|restart|log}"
         exit 1;;
 esac
 
