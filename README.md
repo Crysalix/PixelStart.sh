@@ -10,3 +10,5 @@ Support the /restart command ingame
 ./start.sh stop
 
 ./start.sh restart
+
+./start.sh log
