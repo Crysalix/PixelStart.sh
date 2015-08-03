@@ -32,8 +32,16 @@ function root_check(){
     fi
 }
 
+function mc_check(){
+if [ ! -f "$path/$service" ];then
+    echo -e "$fail $service is missing !";
+    exit 1
+fi
+}
+
 function mc_start(){
     root_check
+    mc_check
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
         then
         echo -e "$warn $service is running !"
