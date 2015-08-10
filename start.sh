@@ -39,6 +39,18 @@ if [ ! -f "$path/$service" ];then
 fi
 }
 
+function mc_status(){
+    mc_check
+    if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+    then
+        echo -e "$ok $service is running !"
+        return 1
+    else
+        echo -e "$warn $service is not running !"
+        return 0
+    fi
+}
+
 function mc_start(){
     root_check
     mc_check
@@ -114,8 +126,10 @@ case $1 in
         mc_restart;;
     log)
         mc_log;;
+    status)
+        mc_status;;
     *)
-        echo -e "Usage: $0 {start|stop|restart|log}"
+        echo -e "Usage: $0 {start|stop|restart|log|status}"
         exit 1;;
 esac
 
