@@ -19,6 +19,9 @@ echo -e "$info Checking for start.sh update..."
 currentmclauncherv=$(curl -fs http://dev.pixe-life.org/pixeltools/files/v/mclauncherversion)
 if [ $currentmclauncherv -gt $mclauncherv ]; then
 	echo -e "$ok Version $currentmclauncherv found !"
+    wget -O updater.sh http://dev.pixe-life.org/pixeltools/files/updater/start.sh >/dev/null 2>&1
+    bash updater.sh $0 $*&
+    exit 0
 elif [ $currentmclauncherv -le $mclauncherv ]; then
 	echo -e "$ok No update found !"
 else
