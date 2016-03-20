@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# ==================================
+# Pixeltools by Crysalix
+# ==================================
 # Minecraft Launcher
 mclauncherv="16031901"
 
