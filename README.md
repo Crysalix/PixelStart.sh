@@ -12,3 +12,7 @@ Support the /restart command ingame
 ./start.sh restart
 
 ./start.sh log
+
+# Auto updater added
+
+This script will try to update himself if new version is found.
