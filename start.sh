@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Minecraft Launcher
+mclauncherv="16031901"
+
 #Colors
 ok="[\e[0;32m OK \e[0;39m]"
 warn="[\e[1;33mWARN\e[0;39m]"
@@ -8,14 +11,40 @@ info="[\e[0;36mINFO\e[0;39m]"
 warning="\e[0;31mWARNING!\e[0;39m"
 threedot="[....]"
 
-#Settings
-mcscreen='mcserver'
-service='spigot-1.8.8.jar'
-path=$(pwd)
-MMIN='1G'
-MMAX='4G'
+# ==================================
+# Update Check
+# ==================================
 
-#Functions
+echo -e "$info Checking for start.sh update..."
+currentmclauncherv=$(curl -fs http://dev.pixe-life.org/pixeltools/files/v/mclauncherversion)
+if [ $currentmclauncherv -gt $mclauncherv ]; then
+	echo -e "$ok Version $currentmclauncherv found !"
+elif [ $currentmclauncherv -le $mclauncherv ]; then
+	echo -e "$ok No update found !"
+else
+	echo -e "$fail Can't connect to server !"
+fi
+
+# ==================================
+# Load Settings
+# ==================================
+
+if [ -f start.sh.conf ];then
+    source start.sh.conf
+else
+    echo "rootdir=$pwd" > start.sh.conf
+    echo "mcscreen='mcserver'" >> start.sh.conf
+    echo "service='spigot.jar'" >> start.sh.conf
+    echo "MMIN='1G'" >> start.sh.conf
+    echo "MMAX='3G'" >> start.sh.conf
+fi
+
+source start.sh.conf
+
+# ==================================
+# Functions
+# ==================================
+
 function root_check(){
     if [ $(whoami) = "root" ]; then
         for ((r=0 ; r<5 ; r++))
@@ -33,34 +62,29 @@ function root_check(){
 }
 
 function mc_check(){
-if [ ! -f "$path/$service" ];then
+if [ ! -f "$pwd/$service" ];then
     echo -e "$fail $service is missing !";
     exit 1
 fi
 }
 
 function mc_status(){
-    mc_check
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
     then
         echo -e "$ok $service is running !"
-        return 1
     else
         echo -e "$warn $service is not running !"
-        return 0
     fi
 }
 
 function mc_start(){
-    root_check
-    mc_check
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
         then
         echo -e "$warn $service is running !"
     else
         echo -e "$info Starting $service..."
-        bash -c "screen -dmS $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $path/$service nogui"
-        sleep 15
+        screen -dmSU $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$service nogui
+        sleep 10
         if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
         then
             echo -e "$ok $service started !"
@@ -71,8 +95,7 @@ function mc_start(){
 }
 
 function mc_startmc(){
-    echo -e "$info Starting $service..."
-    bash -c "screen -dmS $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $path/$service nogui"
+    screen -dmSU $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $path/$service nogui
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
     then
         echo -e "$ok $service started !"
@@ -82,27 +105,58 @@ function mc_startmc(){
 }
 
 function mc_stop(){
+    echo -n "[....] Sending save-all & stop command."
+    failstatus=0
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
     then
-        echo -e "$info Shutting down $service"
-        bash -c "screen -p 0 -S $mcscreen -X eval 'stuff \"save-all\"\015'"
+        screen -p 0 -S $mcscreen -X eval 'stuff \015save-all\015' > /dev/null
         sleep 1
-        bash -c "screen -p 0 -S $mcscreen -X eval 'stuff \"stop\"\015'"
-        sleep 10
-        if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+        screen -p 0 -S $mcscreen -X eval 'stuff \015stop\015' > /dev/null
+        status=0
+        until [ $status = 15 ] || [ $status = 20 ]
+        do
+            if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+            then
+                echo -n "."
+                sleep 1
+                ((status++))
+            else
+                status=20
+            fi
+        done
+        if [ $status = 15 ]
         then
-            echo -e "$fail $service is runing !"
-        else
-            echo -e "$ok stopped $service !"
+            echo -e -n "\n$fail Checking Timeout after 15 sec for Pixeland server."
+            failstatus=1
+        elif [ $status = 20 ]
+        then
+            echo -e -n "\n$ok Stoped Pixeland server."
         fi
     else
-        echo -e "$warn $service is not running !"
+        echo -e -n "\n$warn Server Pixeland is not running !"
     fi
+    if [ $failstatus = 0 ]
+    then
+        echo -e "\n$ok Done !"
+    elif [ $failstatus = 1 ]
+    then
+        echo -e "\n$fail Error when stoping server"
+        read -p "Do you want to force QUIT command [y/N]? " -t 10 yn
+        yn=$(echo $yn | awk '{print tolower($0)}')
+        if [ $yn = "y" ]; then
+            mc_forcestop
+        fi
+    fi
+}
+
+function mc_forcestop(){
+
 }
 
 function mc_restart(){
     if [ -z $who ] || [ $who != "mc" ]; then
         mc_stop
+        sleep 1
         mc_start
     elif [ $who = "mc" ]; then
         mc_startmc
@@ -112,9 +166,12 @@ function mc_restart(){
 function mc_log(){
     echo -e "$warn Ctrl + C = quit"
     sleep 1
-    cd $path/logs
+    cd $rootdir/logs
     tail -f latest.log
 }
+
+root_check
+mc_check
 
 case $1 in
     start)
