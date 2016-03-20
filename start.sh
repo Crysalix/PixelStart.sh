@@ -4,7 +4,7 @@
 # Pixeltools by Crysalix
 # ==================================
 # Minecraft Launcher
-mclauncherv="16031901"
+mclauncherv="16032001"
 
 #Colors
 ok="[\e[0;32m OK \e[0;39m]"
@@ -23,8 +23,7 @@ currentmclauncherv=$(curl -fs http://dev.pixe-life.org/pixeltools/files/v/mclaun
 if [ $currentmclauncherv -gt $mclauncherv ]; then
 	echo -e "$ok Version $currentmclauncherv found !"
     wget -O updater.sh http://dev.pixe-life.org/pixeltools/files/updater/start.sh >/dev/null 2>&1
-    bash updater.sh $0 $*&
-    exit 0
+    bash updater.sh $0 $*&&exit 0
 elif [ $currentmclauncherv -le $mclauncherv ]; then
 	echo -e "$ok No update found !"
 else
