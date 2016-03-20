@@ -37,7 +37,7 @@ fi
 if [ -f start.sh.conf ];then
     source start.sh.conf
 else
-    echo "rootdir=$pwd" > start.sh.conf
+    echo 'rootdir=$(pwd)' > start.sh.conf
     echo "mcscreen='mcserver'" >> start.sh.conf
     echo "service='spigot.jar'" >> start.sh.conf
     echo "MMIN='1G'" >> start.sh.conf
