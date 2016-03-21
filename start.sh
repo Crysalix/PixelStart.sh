@@ -131,14 +131,14 @@ function mc_stop(){
         done
         if [ $status = 15 ]
         then
-            echo -e -n "\n$fail Checking Timeout after 15 sec for Pixeland server."
+            echo -e -n "\n$fail Checking Timeout after 15 sec for $mcscreen server."
             failstatus=1
         elif [ $status = 20 ]
         then
-            echo -e -n "\n$ok Stoped Pixeland server."
+            echo -e -n "\n$ok Stoped $mcscreen server."
         fi
     else
-        echo -e -n "\n$warn Server Pixeland is not running !"
+        echo -e -n "\n$warn Server $mcscreen is not running !"
     fi
     if [ $failstatus = 0 ]
     then
@@ -155,7 +155,33 @@ function mc_stop(){
 }
 
 function mc_forcestop(){
-
+    echo -n "$threedot Sending KILL command."
+    if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+    then
+        screen -S $mcscreen -X quit > /dev/null
+        status=0
+        until [ $status = 10 ] || [ $status = 15 ]
+        do
+            if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+            then
+                echo -n "."
+                sleep 1
+                ((status++))
+            else
+                status=15
+            fi
+        done
+        if [ $status = 10 ]
+        then
+            echo -e -n "\n$fail Checking Timeout after 10 sec for $mcscreen server."
+        elif [ $status = 15 ]
+        then
+            echo -e -n "\n$ok Killed server $mcscreen."
+        fi
+    else
+        echo -e -n "\n$info Server $mcscreen already stopped."
+    fi
+    echo -e "\n$ok Done !"
 }
 
 function mc_restart(){
