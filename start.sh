@@ -100,7 +100,7 @@ function mc_start(){
 }
 
 function mc_startmc(){
-    screen -dmSU $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $path/$service nogui
+    screen -dmSU $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$service nogui
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
     then
         echo -e "$ok $service started !"
