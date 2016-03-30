@@ -71,7 +71,7 @@ function root_check(){
 }
 
 function mc_check(){
-if [ ! -f "$pwd/$service" ];then
+if [ ! -f "$rootdir/$service" ];then
     echo -e "$fail $service is missing !";
     exit 1
 fi
@@ -105,6 +105,7 @@ function mc_start(){
 
 function mc_startmc(){
     screen -dmSU $mcscreen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$service nogui
+    sleep 10
     if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
     then
         echo -e "$ok $service started !"
@@ -194,8 +195,29 @@ function mc_restart(){
         sleep 1
         mc_start
     elif [ $who = "mc" ]; then
+        echo "Restart Server !" >> log.txt
         mc_startmc
     fi
+}
+
+function  mc_input(){
+    if ps ax | grep -v grep | grep -i SCREEN | grep $mcscreen > /dev/null
+    then
+        i=0
+        for param in "$@"
+        do
+            if [ $i -eq 0 ] ; then
+                ((i=$i+1))
+            else
+                commande="$commande$param"
+                commande="$commande "
+            fi
+        done
+
+        bash -c "screen -p 0 -S $mcscreen -X eval 'stuff \"$commande\"\015'"
+    else
+        echo -e "$fail $service is not runing !"
+  fi
 }
 
 function mc_log(){
@@ -209,19 +231,25 @@ root_check
 mc_check
 
 case $1 in
+    status)
+        mc_status;;
     start)
         mc_start;;
     stop)
         mc_stop;;
+    kill)
+        force_stop;;
     restart)
         who=$2
         mc_restart;;
+    check)
+        mc_check;;
     log)
         mc_log;;
-    status)
-        mc_status;;
+    input)
+        mc_input "$@";;
     *)
-        echo -e "Usage: $0 {start|stop|restart|log|status}"
+        echo -e "Usage: $0 {start|stop|kill|restart|status|input|log}"
         exit 1;;
 esac
 
