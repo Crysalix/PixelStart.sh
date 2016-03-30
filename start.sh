@@ -4,7 +4,7 @@
 # Pixeltools by Crysalix
 # ==================================
 # Minecraft Launcher
-mclauncherv="16032001"
+mclauncherv="16033001"
 
 #Colors
 ok="[\e[0;32m OK \e[0;39m]"
