@@ -46,9 +46,8 @@ else
     echo "service='spigot.jar'" >> start.sh.conf
     echo "MMIN='1G'" >> start.sh.conf
     echo "MMAX='3G'" >> start.sh.conf
+    source start.sh.conf
 fi
-
-source start.sh.conf
 
 # ==================================
 # Functions
