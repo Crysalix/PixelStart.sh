@@ -2,8 +2,8 @@
 Simple start.sh for Minecraft servers
 
 Support the /restart command ingame
-# Usage :
-## Basic commands :
+## Usage :
+### Basic commands :
 
 Start the server.
 ```bash
@@ -26,8 +26,8 @@ Showing some status.
 $ ./start.sh status
 ```
 
-## Watchdog commands :
-### Used with crontab, this script can automatically restart your server when it crashed.
+### Watchdog commands :
+#### Used with crontab, this script can automatically restart your server when it crashed.
 
 Showing watchdog status.
 ```bash
@@ -52,10 +52,10 @@ Crontab : For every 5 minutes.
 ```
 */5 * * * * bash /path/to/server/start.sh wdcheck
 ```
-### Also you can combine those commands. Example below, for stop the server AND stop watchdog monitoring.
+#### Also you can combine those commands. Example below, for stop the server AND stop watchdog monitoring.
 ```bash
 $ ./start.sh stop wdoff
 ```
-# Dependencies :
+## Dependencies :
 * curl
 * restart.sh file
