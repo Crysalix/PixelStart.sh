@@ -56,6 +56,6 @@ Crontab : For every 5 minutes.
 ```bash
 $ ./start.sh stop wdoff
 ```
-# Auto updater added
-
-This script will try to update himself if new version is found.
+# Dependencies :
+* curl
+* restart.sh file
