@@ -88,7 +88,6 @@ else
         MMIN='1G'
         MMAX='3G'
         saves='true'
-        TryFixOOS='true'
         watchDog='false'
         mc_conf
         pt_log 'Default configuration file created.' 'info'
