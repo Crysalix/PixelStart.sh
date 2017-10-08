@@ -25,6 +25,15 @@ Showing some status.
 ```bash
 $ ./start.sh status
 ```
+Send save-off to server (and save-all).
+```bash
+$ ./start.sh saveon
+```
+Send save-on to server.
+```bash
+$ ./start.sh saveoff
+```
+When you use crontab to send regularly a save-all command, using saveoff denied sending "save-all" command. (./start.sh input save-all)
 
 ### Watchdog commands :
 #### Used with crontab, this script can automatically restart your server when it crashed.
