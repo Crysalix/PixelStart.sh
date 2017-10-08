@@ -2,19 +2,69 @@
 Simple start.sh for Minecraft servers
 
 Support the /restart command ingame
+## Usage :
+### Basic commands :
 
-# Commands :
+Start the server.
+```bash
+$ ./start.sh start
+```
+Stop the server.
+```bash
+$ ./start.sh stop
+```
+Restart the server.
+```bash
+$ ./start.sh restart
+```
+Send commands to the screen.
+```bash
+$ ./start.sh input
+```
+Showing some status.
+```bash
+$ ./start.sh status
+```
+Send save-off to server (and save-all).
+```bash
+$ ./start.sh saveon
+```
+Send save-on to server.
+```bash
+$ ./start.sh saveoff
+```
+When you use crontab to send regularly a save-all command, using saveoff denied sending "save-all" command. (./start.sh input save-all)
 
-./start.sh start
+### Watchdog commands :
+#### Used with crontab, this script can automatically restart your server when it crashed.
 
-./start.sh stop
+Showing watchdog status.
+```bash
+$./start.sh watchdog
+```
 
-./start.sh restart
+Activate monitoring
+```bash
+$./start.sh wdon
+```
 
-./start.sh log
+Desactivate monitoring
+```bash
+$./start.sh wdoff
+```
 
-./start.sh status
-
-# Auto updater added
-
-This script will try to update himself if new version is found.
+Run this command with crontab eveny x minutes.
+```bash
+$./start.sh wdcheck
+```
+Crontab : For every 5 minutes.
+```
+*/5 * * * * bash /path/to/server/start.sh wdcheck
+```
+#### Also you can combine those commands. Example below, for stop the server AND stop watchdog monitoring.
+```bash
+$ ./start.sh stop wdoff
+```
+## Dependencies :
+* curl
+* restart.sh file

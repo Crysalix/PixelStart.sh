@@ -1,3 +1,2 @@
 #!/bin/bash
-
-bash start.sh restart mc
+nohup bash start.sh restart fromserver
