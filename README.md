@@ -67,4 +67,5 @@ $ ./start.sh stop wdoff
 ```
 ## Dependencies :
 * curl
+* screen
 * restart.sh file
