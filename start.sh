@@ -103,6 +103,8 @@ fi
 if [ -f $rootdir/server.properties ];then
         serverPort=$(grep server-port $rootdir/server.properties | cut -d= -f2)
 else
+    pt_log 'Can\'t find server.properties file. First time server started ?' 'warn'
+    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $warn Can\'t find server.properties file. First time server started ?"
     serverPort='25565'
 fi
 
@@ -130,7 +132,7 @@ mc_start(){
     if [ $(mc_check) = 8 ] || [ $(mc_check) = 9 ];then
             echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server."
                 cd $rootdir
-        screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile nogui
+                screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile nogui
                 status=0
                 while [ -z $(lsof -i:$serverPort -t) ];do
                         echo -n "."
@@ -141,15 +143,16 @@ mc_start(){
                     pt_log 'Server fail at boot ? Timeout after 15 sec' 'warn'
                 else
                         echo -e "Done."
-                        lsof -i:$serverPort -t > $rootdir/.start.pid
-                        pt_log "Server started with PID : $(lsof -i:25565 -t)" 'info'
+                        pid=$(lsof -i:$serverPort -t)
+                        echo $pid > $rootdir/.start.pid
+                        pt_log "Server started with PID : $pid" 'info'
                 fi
                 if [ $1 ] && [ $1 = 'wdon' ];then
                         wd_on
                 fi
-    else
+         else
                 pt_log 'Error when start the server !' 'fail'
-        mc_status
+                mc_status
         exit 1
     fi
 }
