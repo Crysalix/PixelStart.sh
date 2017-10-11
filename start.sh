@@ -103,7 +103,7 @@ fi
 if [ -f $rootdir/server.properties ];then
         serverPort=$(grep server-port $rootdir/server.properties | cut -d= -f2)
 else
-    pt_log 'Can\'t find server.properties file. First time server started ?' 'warn'
+    pt_log "Can't find server.properties file. First time server started ?" 'warn'
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $warn Can\'t find server.properties file. First time server started ?"
     serverPort='25565'
 fi
