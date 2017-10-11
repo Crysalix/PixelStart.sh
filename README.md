@@ -40,22 +40,22 @@ When you use crontab to send regularly a save-all command, using saveoff denied 
 
 Showing watchdog status.
 ```bash
-$./start.sh watchdog
+$ ./start.sh watchdog
 ```
 
 Activate monitoring
 ```bash
-$./start.sh wdon
+$ ./start.sh wdon
 ```
 
 Desactivate monitoring
 ```bash
-$./start.sh wdoff
+$ ./start.sh wdoff
 ```
 
 Run this command with crontab eveny x minutes.
 ```bash
-$./start.sh wdcheck
+$ ./start.sh wdcheck
 ```
 Crontab : For every 5 minutes.
 ```
