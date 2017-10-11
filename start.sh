@@ -205,7 +205,6 @@ mc_stop(){
 }
 
 mc_restart(){
-    set -x
     if [ $1 ] && [ $1 = 'fromserver' ];then
                 pt_log 'Server restart requested from server... Waiting for server stop.'
                 status=0
