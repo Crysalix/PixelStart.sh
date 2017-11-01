@@ -132,7 +132,7 @@ mc_start(){
     if [ $(mc_check) = 8 ] || [ $(mc_check) = 9 ];then
             echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server."
                 cd $rootdir
-                screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile nogui
+                screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
                 status=0
                 while [ -z $(lsof -i:$serverPort -t) ];do
                         echo -n "."
