@@ -4,8 +4,13 @@ Simple start.sh for Minecraft servers
 Support the /restart command ingame.
 For this you need to edit the spigot.yml file and change this :
 ```
+  restart-script: ./start.sh
+```
+to :
+```
   restart-script: ./restart.sh
 ```
+
 ## Usage :
 ### Basic commands :
 
@@ -37,7 +42,7 @@ Send save-on to server.
 ```bash
 $ ./start.sh saveoff
 ```
-When you use crontab to send regularly a save-all command, using saveoff denied sending "save-all" command. (./start.sh input save-all)
+When you use crontab to send regularly a save-all command, using saveoff deny sending "save-all" command. (./start.sh input save-all)
 
 ### Watchdog commands :
 #### Used with crontab, this script can automatically restart your server when it crashed.
@@ -70,6 +75,5 @@ Crontab : For every 5 minutes.
 $ ./start.sh stop wdoff
 ```
 ## Dependencies :
-* curl
 * screen
 * restart.sh file
