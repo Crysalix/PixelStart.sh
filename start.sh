@@ -42,28 +42,6 @@ pt_log(){
 }
 
 # ==================================
-# Update Check
-# ==================================
-
-if [ -f updater.sh ];then
-    rm updater.sh
-else
-    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Checking for start.sh update..."
-    checkv=$(curl -fs http://dev.pixe-life.org/pixeltools/files/v/mclauncherversion) && currentmclauncherv=$checkv || currentmclauncherv=0
-    if [ $currentmclauncherv -gt $mclauncherv ]; then
-        echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $ok Version $currentmclauncherv found !"
-        wget -O updater.sh http://dev.pixe-life.org/pixeltools/files/updater/start.sh >/dev/null 2>&1
-        bash updater.sh $0 $*&&exit 0
-    elif [ $currentmclauncherv -le $mclauncherv ]; then
-        if [ $currentmclauncherv == 0 ]; then
-            echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $fail Can't connect to server !"
-        else
-            echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $ok No update found !"
-        fi
-    fi
-fi
-
-# ==================================
 # Load Settings
 # ==================================
 
