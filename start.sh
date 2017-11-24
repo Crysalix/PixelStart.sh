@@ -45,6 +45,13 @@ pt_log(){
 # Load Settings
 # ==================================
 
+if [ ! -f $rootdir/restart.sh ];then
+	echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Creating restart.sh file."
+	echo -e "#!/bin/bash" > $rootdir/restart.sh
+	echo -e "nohup bash start.sh restart fromserver" >> $rootdir/restart.sh
+	chmod 740 $rootdir/restart.sh
+fi
+
 mc_conf(){
         echo "screen='$screen'" > $rootdir/.start.conf
         echo "serverfile='$serverfile'" >> $rootdir/.start.conf
