@@ -143,7 +143,7 @@ mc_start(){
 			fi
 		else
 			echo -e "."
-			pt_log 'Server fail at boot ? Timeout after 5 sec' 'warn'
+			pt_log 'Server fail at boot ? Timeout after $timeout sec' 'warn'
 			mc_status
 			exit 1
 		fi
@@ -156,49 +156,56 @@ mc_start(){
 
 mc_stop(){
     pt_log 'Init server stop.'
-        if [ $1 ] && [ $1 = 'wdoff' ];then
-                wd_off
-        fi
+	if [ $1 ] && [ $1 = 'wdoff' ];then
+		wd_off
+	fi
     if [ $(mc_check) -ge 14 ];then
-                if [ -f $rootdir/advmc.sh ]; then
-                        echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $ok sending 10 sec countdown on server before stop."
-                        bash $rootdir/advmc.sh stopscript
-                fi
-                echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Sending save-all & stop command."
-                screen -p 0 -S $screen -X stuff "save-all$(printf \\r)"
-                sleep 1
-                screen -p 0 -S $screen -X stuff "stop$(printf \\r)"
-                status=0
-                pid=$(cat $rootdir/.start.pid)
-                until [ -z "$(ps $pid | grep -v PID)" ];do
-                        echo -n "."
-                        sleep 1
-                        ((status++))
-                done
-                echo -e "Done."
-                pt_log 'Server stoped.' 'info'
-                if [ -f $rootdir/.start.pid ];then
-                    rm $rootdir/.start.pid
-                fi
-        elif [ $(mc_check) -ge 12 ];then
-                pt_log 'Server is already stoped, but screen is alive.' 'warn'
-                echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Trying to kill the screen..."
-                screen -X -S $screen kill
-                sleep 1
-                if ps ax | grep -v grep | grep -i SCREEN | grep $screen > /dev/null
-                then
-                        echo -e " $fail Error !"
-                        echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Showing status..."
-                        sleep 1
-                        mc_status
-                else
-                    echo -e " $ok Done."
-                fi
-        else
-                pt_log 'Error when stop the server !' 'fail'
-                mc_status
+		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Sending save-all & stop command."
+		screen -p 0 -S $screen -X stuff "save-all$(printf \\r)"
+		sleep 1
+		screen -p 0 -S $screen -X stuff "stop$(printf \\r)"
+		count=0
+		pid=$(cat $rootdir/.start.pid) # && || if file is missing
+		until [ $count -gt 30 ];do
+			if [ "$(ps $pid | grep -v PID)" ];then
+				echo -n "."
+				sleep 1
+				((count++))
+			else
+			    count=999
+			fi
+		done
+		if [ $count = 999 ];then
+			echo -e "Done"
+			pt_log 'Server stoped.' 'info'
+			if [ -f $rootdir/.start.pid ];then
+				rm $rootdir/.start.pid
+			fi
+		else
+			echo -e "."
+			pt_log 'Server fail at boot ? Timeout after 30 sec' 'warn'
+			mc_status
+			exit 1
+		fi
+	elif [ $(mc_check) -ge 12 ];then
+		pt_log 'Server is already stoped, but screen is alive.' 'warn'
+		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Trying to kill the screen..."
+		screen -X -S $screen kill
+		sleep 1
+		if ps ax | grep -v grep | grep -i SCREEN | grep $screen > /dev/null
+			then
+			echo -e " $fail Error !"
+			echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Showing status..."
+			sleep 1
+			mc_status
+		else
+			echo -e " $ok Done."
+		fi
+	else
+		pt_log 'Error when stop the server !' 'fail'
+		mc_status
         exit 1
-        fi
+	fi
 }
 
 mc_restart(){
