@@ -121,24 +121,31 @@ root_check(){
 mc_start(){
     pt_log 'Init server start.'
     if [ $(mc_check) = 8 ] || [ $(mc_check) = 9 ];then
-		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server."
+		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server (timeout set at $timeout sec)"
 		cd $rootdir
 		screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
-		status=0
-		while [ -z $(lsof -i:$serverPort -t) ];do
-			echo -n "."
-			sleep 1
-			((status++))
+		count=0
+		until [ $count -gt $timeout ];do
+			if [ -z $(lsof -i:$serverPort -t) ];then
+				echo -n "."
+				sleep 1
+				((count++))
+			else
+			    count=999
+			fi
 		done
-        if [ $status = 20 ];then
-			pt_log 'Server fail at boot ? Timeout after 15 sec' 'warn'
-		else
-			echo -e "Done."
+		if [ $count = 999 ];then
+			echo -e "Done"
 			lsof -i:$serverPort -t > $rootdir/.start.pid
-			pt_log "Server started with PID : $pid" 'info'
-		fi
-		if [ $1 ] && [ $1 = 'wdon' ];then
-			wd_on
+			pt_log "Server started with PID : $(cat .start.pid)" 'info'
+			if [ $1 ] && [ $1 = 'wdon' ];then
+				wd_on
+			fi
+		else
+			echo -e "."
+			pt_log 'Server fail at boot ? Timeout after 5 sec' 'warn'
+			mc_status
+			exit 1
 		fi
 	else
 		pt_log 'Error when start the server !' 'fail'
