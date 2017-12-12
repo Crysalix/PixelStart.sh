@@ -36,13 +36,13 @@ $ ./start.sh status
 ```
 Send save-off to server (and save-all).
 ```bash
-$ ./start.sh saveon
+$ ./start.sh saveoff
 ```
 Send save-on to server.
 ```bash
-$ ./start.sh saveoff
+$ ./start.sh saveon
 ```
-When you use crontab to send regularly a save-all command, using saveoff deny sending "save-all" command. (./start.sh input save-all)
+When you use crontab to send regularly a save-all command, using saveoff deny sending "save-all" command, usefull when running backups. (./start.sh input save-all)
 
 ### Watchdog commands :
 #### Used with crontab, this script can automatically restart your server when it crashed.
