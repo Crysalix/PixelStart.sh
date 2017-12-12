@@ -93,7 +93,7 @@ else
 fi
 
 # Get late-bind option
-if [ -f $rootdir/spigot.yml ] && [ $(grep late-bind $rootdir/spigot.yml | grep true) ];then
+if [ -f $rootdir/spigot.yml ] && [ "$(grep late-bind $rootdir/spigot.yml | grep true)" ];then
 	latebind='true'
 else
 	latebind='false'
