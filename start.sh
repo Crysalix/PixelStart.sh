@@ -89,8 +89,14 @@ if [ -f $rootdir/server.properties ];then
         serverPort=$(grep server-port $rootdir/server.properties | cut -d= -f2)
 else
     pt_log "Can't find server.properties file. First time server started ?" 'warn'
-    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $warn Can\'t find server.properties file. First time server started ?"
     serverPort='25565'
+fi
+
+# Get late-bind option
+if [ -f $rootdir/spigot.yml ] && [ $(grep late-bind $rootdir/spigot.yml | grep true) ];then
+	latebind='true'
+else
+	latebind='false'
 fi
 
 # ==================================
@@ -115,29 +121,28 @@ root_check(){
 mc_start(){
     pt_log 'Init server start.'
     if [ $(mc_check) = 8 ] || [ $(mc_check) = 9 ];then
-            echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server."
-                cd $rootdir
-                screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
-                status=0
-                while [ -z $(lsof -i:$serverPort -t) ];do
-                        echo -n "."
-                        sleep 1
-                        ((status++))
-                done
+		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server."
+		cd $rootdir
+		screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
+		status=0
+		while [ -z $(lsof -i:$serverPort -t) ];do
+			echo -n "."
+			sleep 1
+			((status++))
+		done
         if [ $status = 20 ];then
-                    pt_log 'Server fail at boot ? Timeout after 15 sec' 'warn'
-                else
-                        echo -e "Done."
-                        pid=$(lsof -i:$serverPort -t)
-                        echo $pid > $rootdir/.start.pid
-                        pt_log "Server started with PID : $pid" 'info'
-                fi
-                if [ $1 ] && [ $1 = 'wdon' ];then
-                        wd_on
-                fi
-         else
-                pt_log 'Error when start the server !' 'fail'
-                mc_status
+			pt_log 'Server fail at boot ? Timeout after 15 sec' 'warn'
+		else
+			echo -e "Done."
+			lsof -i:$serverPort -t > $rootdir/.start.pid
+			pt_log "Server started with PID : $pid" 'info'
+		fi
+		if [ $1 ] && [ $1 = 'wdon' ];then
+			wd_on
+		fi
+	else
+		pt_log 'Error when start the server !' 'fail'
+		mc_status
         exit 1
     fi
 }
