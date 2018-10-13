@@ -90,14 +90,14 @@ fi
 
 currCheck=$(($lastCheck+300))
 if [ 0$(date +"%s") -gt 0$currCheck ];then
-    currentmclauncherv=$(curl -fs  https://api.github.com/repos/Crysalix/PixelStart.sh/commits/master | grep sha | head -1 | cut --delimiter=\" -f 4)
+    currentmclauncherv=$(curl -fs  https://api.github.com/repos/Crysalix/PixelStart.sh/commits/pixel | grep sha | head -1 | cut --delimiter=\" -f 4)
     echo -e "$info Checking for start.sh update..."
     if [ "$currentmclauncherv" != "$lastSHA" ]; then
         lastCheck=$(date +"%s")
         lastSHA=$currentmclauncherv
         mc_conf
         echo -e "$ok New version found !"
-        wget -O start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/master/start.sh >/dev/null 2>&1
+        wget -O start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/pixel/start.sh >/dev/null 2>&1
         bash $rootdir/start.sh $0 $*&&exit 0
     else
         echo -e "$ok No update found."
