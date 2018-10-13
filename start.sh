@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # ==================================
-# Pixeltools by Crysalix
-# ==================================
 # Minecraft Launcher
-mclauncherv="17100701"
+# ==================================# 
+mclauncherv="18101301"
 
 #Colors
 ok="[\e[1;32m OK \e[0;39m]"
@@ -62,6 +61,9 @@ mc_conf(){
 	echo "#Watchdog : if true, script will attempt to start server when './start.sh wdcheck' get it offline." >> $rootdir/.start.conf
 	echo "#Must be run with crontab ( */5 * * * * bash $rootdir/start.sh wdcheck ) for check every 5 minutes." >> $rootdir/.start.conf
 	echo "watchDog='$watchDog'" >> $rootdir/.start.conf
+    echo "#Don't edit the last two line." >> $rootdir/.start.conf
+    echo "lastSHA='$lastSHA'" >> $rootdir/.start.conf
+    echo "lastCheck='$lastCheck'" >> $rootdir/.start.conf
 }
 
 if [ -f $rootdir/.start.conf ];then
@@ -74,12 +76,42 @@ else
 	MMAX='3G'
 	saves='true'
 	watchDog='false'
+	lastSHA='abcdefghijklmnopqrstuvwxyz'
+	lastCheck='0000000000'
 	mc_conf
 	pt_log 'Default configuration file created.' 'info'
 	echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $warn Edit new config file if required."
 	exit 0
 fi
 
+# ==================================
+# Update Check
+# ==================================
+
+currCheck=$(($lastCheck+300))
+if [ 0$(date +"%s") -gt 0$currCheck ];then
+    #UPDATE CHECK REQUIRED
+    currentmclauncherv=$(curl -fs  https://api.github.com/repos/Crysalix/PixelStart.sh/commits/master | grep sha | head -1 | cut --delimiter=\" -f 4)
+    echo -e "$info Checking for start.sh update..."
+    if [ "$currentmclauncherv" != "$lastSHA" ]; then
+        lastCheck=$(date +"%s")
+        lastSHA=$currentmclauncherv
+        mc_conf
+        #NEW VERSION FOUND
+        echo -e "$ok New version found !"
+        wget -O start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/master/start.sh >/dev/null 2>&1
+        bash start.sh $0 $*&&exit 0
+    else
+        echo -e "$ok No update found."
+    fi
+    lastCheck=$(date +"%s")
+    mc_conf
+else
+    #JUSTE WAIT MORE TIME BEFORE NEXT CHECK... NOTHING TO DO
+    echo -e "wait 5 minutes for next check"
+fi
+
+exit 0
 # ==================================
 # Vars
 # ==================================
