@@ -1,5 +1,5 @@
 # PixelStart.sh
-Simple start.sh for Minecraft servers
+Simple start.sh for Minecraft servers (edited for Pixelife's Minecraft servers)
 
 Support the /restart command ingame.
 For this you need to edit the spigot.yml file and change this :
