@@ -45,43 +45,43 @@ pt_log(){
 # ==================================
 
 if [ ! -f $rootdir/restart.sh ];then
-	echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Creating restart.sh file."
-	echo -e "#!/bin/bash" > $rootdir/restart.sh
-	echo -e "nohup bash start.sh restart fromserver >/dev/null 2>&1 &" >> $rootdir/restart.sh
-	chmod 740 $rootdir/restart.sh
+    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Creating restart.sh file."
+    echo -e "#!/bin/bash" > $rootdir/restart.sh
+    echo -e "nohup bash start.sh restart fromserver >/dev/null 2>&1 &" >> $rootdir/restart.sh
+    chmod 740 $rootdir/restart.sh
 fi
 
 mc_conf(){
-	echo "screen='$screen'" > $rootdir/.start.conf
-	echo "serverfile='$serverfile'" >> $rootdir/.start.conf
-	echo "MMIN='$MMIN'" >> $rootdir/.start.conf
-	echo "MMAX='$MMAX'" >> $rootdir/.start.conf
-	echo "#Using this with crontab, you can allow or deny sending \"save-all\" command to console. Usefull when running backups." >> $rootdir/.start.conf
-	echo "saves='$saves'" >> $rootdir/.start.conf
-	echo "#Watchdog : if true, script will attempt to start server when './start.sh wdcheck' get it offline." >> $rootdir/.start.conf
-	echo "#Must be run with crontab ( */5 * * * * bash $rootdir/start.sh wdcheck ) for check every 5 minutes." >> $rootdir/.start.conf
-	echo "watchDog='$watchDog'" >> $rootdir/.start.conf
+    echo "screen='$screen'" > $rootdir/.start.conf
+    echo "serverfile='$serverfile'" >> $rootdir/.start.conf
+    echo "MMIN='$MMIN'" >> $rootdir/.start.conf
+    echo "MMAX='$MMAX'" >> $rootdir/.start.conf
+    echo "#Using this with crontab, you can allow or deny sending \"save-all\" command to console. Usefull when running backups." >> $rootdir/.start.conf
+    echo "saves='$saves'" >> $rootdir/.start.conf
+    echo "#Watchdog : if true, script will attempt to start server when './start.sh wdcheck' get it offline." >> $rootdir/.start.conf
+    echo "#Must be run with crontab ( */5 * * * * bash $rootdir/start.sh wdcheck ) for check every 5 minutes." >> $rootdir/.start.conf
+    echo "watchDog='$watchDog'" >> $rootdir/.start.conf
     echo "#Don't edit the last two line." >> $rootdir/.start.conf
     echo "lastSHA='$lastSHA'" >> $rootdir/.start.conf
     echo "lastCheck='$lastCheck'" >> $rootdir/.start.conf
 }
 
 if [ -f $rootdir/.start.conf ];then
-	echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Load configuration file."
-	source $rootdir/.start.conf
+    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Load configuration file."
+    source $rootdir/.start.conf
 else
-	screen='mcserver'
-	serverfile='spigot.jar'
-	MMIN='1G'
-	MMAX='3G'
-	saves='true'
-	watchDog='false'
-	lastSHA='abcdefghijklmnopqrstuvwxyz'
-	lastCheck='0000000000'
-	mc_conf
-	pt_log 'Default configuration file created.' 'info'
-	echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $warn Edit new config file if required."
-	exit 0
+    screen='mcserver'
+    serverfile='spigot.jar'
+    MMIN='1G'
+    MMAX='3G'
+    saves='true'
+    watchDog='false'
+    lastSHA='abcdefghijklmnopqrstuvwxyz'
+    lastCheck='0000000000'
+    mc_conf
+    pt_log 'Default configuration file created.' 'info'
+    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $warn Edit new config file if required."
+    exit 0
 fi
 
 # ==================================
@@ -118,7 +118,7 @@ exit 0
 
 # Get server port
 if [ -f $rootdir/server.properties ];then
-	serverPort=$(grep server-port $rootdir/server.properties | cut -d= -f2)
+    serverPort=$(grep server-port $rootdir/server.properties | cut -d= -f2)
 else
     pt_log "Can't find server.properties file. First time server started ?" 'warn'
     serverPort='25565'
@@ -126,9 +126,9 @@ fi
 
 # Get late-bind option for delaying timeout or not.
 if [ -f $rootdir/spigot.yml ] && [ "$(grep late-bind $rootdir/spigot.yml | grep true)" ];then
-	timeout=60
+    timeout=60
 else
-	timeout=30
+    timeout=30
 fi
 
 # ==================================
@@ -138,8 +138,8 @@ fi
 root_check(){
     if [ $(whoami) = "root" ];then
         for ((r=0 ; r<5 ; r++));do
-			echo -e "$warning Run Minecraft Server as root is not recommended !"
-			sleep 0.5
+        echo -e "$warning Run Minecraft Server as root is not recommended !"
+            sleep 0.5
         done
         read -p "Do you want to continue [y/N]? " yn
         yn=$(echo $yn | awk '{print tolower($0)}')
@@ -153,35 +153,35 @@ root_check(){
 mc_start(){
     pt_log 'Init server start.'
     if [ $(mc_check) = 8 ] || [ $(mc_check) = 9 ];then
-		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server (timeout set at $timeout sec)"
-		cd $rootdir
-		screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
-		count=0
-		until [ $count -gt $timeout ];do
-			if [ -z $(lsof -i:$serverPort -t) ];then
-				echo -n "."
-				sleep 1
-				((count++))
-			else
-			    count=999
-			fi
-		done
-		if [ $count = 999 ];then
-			echo -e "Done"
-			lsof -i:$serverPort -t > $rootdir/.start.pid
-			pt_log "Server started with PID : $(cat .start.pid)" 'info'
-			if [ $1 ] && [ $1 = 'wdon' ];then
-				wd_on
-			fi
-		else
-			echo -e "."
-			pt_log 'Server fail at boot ? Timeout after $timeout sec' 'warn'
-			mc_status
-			exit 1
-		fi
-	else
-		pt_log 'Error when start the server !' 'fail'
-		mc_status
+        echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Starting server (timeout set at $timeout sec)"
+        cd $rootdir
+        screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
+        count=0
+        until [ $count -gt $timeout ];do
+            if [ -z $(lsof -i:$serverPort -t) ];then
+                echo -n "."
+                sleep 1
+                ((count++))
+            else
+                count=999
+            fi
+        done
+        if [ $count = 999 ];then
+            echo -e "Done"
+            lsof -i:$serverPort -t > $rootdir/.start.pid
+            pt_log "Server started with PID : $(cat .start.pid)" 'info'
+            if [ $1 ] && [ $1 = 'wdon' ];then
+                wd_on
+            fi
+        else
+            echo -e "."
+            pt_log 'Server fail at boot ? Timeout after $timeout sec' 'warn'
+            mc_status
+           exit 1
+        fi
+    else
+        pt_log 'Error when start the server !' 'fail'
+        mc_status
         exit 1
     fi
 }
