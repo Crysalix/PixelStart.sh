@@ -100,7 +100,7 @@ if [ 0$(date +"%s") -gt 0$currCheck ];then
         #NEW VERSION FOUND
         echo -e "$ok New version found !"
         wget -O start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/master/start.sh >/dev/null 2>&1
-        bash start.sh $0 $*&&exit 0
+        bash $rootdir/start.sh $0 $*&&exit 0
     else
         echo -e "$ok No update found."
     fi
