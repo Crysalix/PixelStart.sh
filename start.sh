@@ -160,6 +160,10 @@ mc_stop(){
 		wd_off
 	fi
     if [ $(mc_check) -ge 14 ];then
+		if [ -f $rootdir/advmc.sh ]; then
+			echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $ok sending 10 sec countdown on server before stop."
+			bash $rootdir/advmc.sh stopscript
+		fi
 		echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Sending save-all & stop command."
 		screen -p 0 -S $screen -X stuff "save-all$(printf \\r)"
 		sleep 1
