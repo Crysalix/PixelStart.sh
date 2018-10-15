@@ -323,20 +323,20 @@ mc_status(){
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Showing status..."
     sleep 1
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server location :    $rootdir"
-    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server file :    $serverfile"
+    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server file :        $serverfile"
     if [ -f $rootdir/$serverfile ]; then
         echo -e " $ok Found it !"
     else
         echo -e " $warn Missing !"
     fi
-    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server screen name :    $screen"
+    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server screen name : $screen"
     if ps ax | grep -v grep | grep -i SCREEN | grep $screen > /dev/null
     then
         echo -e " $ok Screen found !"
     else
         echo -e " $warn Screen not found !"
     fi
-    echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server port :    $serverPort"
+    echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server port :        $serverPort"
     if [ $(lsof -i:$serverPort -t) ];then
         echo -e " $ok Server is listen."
         status=0
@@ -347,15 +347,15 @@ mc_status(){
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info PID File :"
     if [ -f $rootdir/.start.pid ]; then
         pid=$(cat $rootdir/.start.pid)
-        echo -e "        $pid $ok Found it !"
+        echo -e "           $pid $ok Found it !"
     else
-        echo -e "        x $warn Missing !"
+        echo -e "           x $warn Missing !"
     fi
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info save-all input :"
     if [ $saves = 'true' ];then
-        echo -e "    Allow command"
+        echo -e "     Allow command"
     else
-        echo -e "    Deny command"
+        echo -e "     Deny command"
     fi
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info WatchDog status :"
     if [ $watchDog = 'true' ];then
