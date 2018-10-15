@@ -3,7 +3,7 @@
 # ==================================
 # Minecraft Launcher
 # ==================================# 
-mclauncherv="18101301"
+mclauncherv="18101503"
 
 #Colors
 ok="[\e[1;32m OK \e[0;39m]"
@@ -88,7 +88,7 @@ fi
 # Update Check
 # ==================================
 
-currCheck=$(($lastCheck+300))
+currCheck=$(($lastCheck+1800))
 if [ 0$(date +"%s") -gt 0$currCheck ];then
     currentmclauncherv=$(curl -fs  https://api.github.com/repos/Crysalix/PixelStart.sh/commits/master | grep sha | head -1 | cut --delimiter=\" -f 4)
     echo -e "$info Checking for start.sh update..."
@@ -97,7 +97,7 @@ if [ 0$(date +"%s") -gt 0$currCheck ];then
         lastSHA=$currentmclauncherv
         mc_conf
         echo -e "$ok New version found !"
-        wget -O start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/master/start.sh >/dev/null 2>&1
+        wget -O $rootdir/start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/master/start.sh >/dev/null 2>&1
         bash $rootdir/start.sh $0 $*&&exit 0
     else
         echo -e "$ok No update found."
@@ -319,20 +319,20 @@ mc_status(){
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Showing status..."
     sleep 1
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server location :    $rootdir"
-    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server file :    $serverfile"
+    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server file :        $serverfile"
     if [ -f $rootdir/$serverfile ]; then
         echo -e " $ok Found it !"
     else
         echo -e " $warn Missing !"
     fi
-    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server screen name :    $screen"
+    echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server screen name : $screen"
     if ps ax | grep -v grep | grep -i SCREEN | grep $screen > /dev/null
     then
         echo -e " $ok Screen found !"
     else
         echo -e " $warn Screen not found !"
     fi
-    echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server port :    $serverPort"
+    echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server port :        $serverPort"
     if [ $(lsof -i:$serverPort -t) ];then
         echo -e " $ok Server is listen."
         status=0
@@ -343,15 +343,15 @@ mc_status(){
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info PID File :"
     if [ -f $rootdir/.start.pid ]; then
         pid=$(cat $rootdir/.start.pid)
-        echo -e "        $pid $ok Found it !"
+        echo -e "           $pid $ok Found it !"
     else
-        echo -e "        x $warn Missing !"
+        echo -e "           x $warn Missing !"
     fi
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info save-all input :"
     if [ $saves = 'true' ];then
-        echo -e "    Allow command"
+        echo -e "     Allow command"
     else
-        echo -e "    Deny command"
+        echo -e "     Deny command"
     fi
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info WatchDog status :"
     if [ $watchDog = 'true' ];then
