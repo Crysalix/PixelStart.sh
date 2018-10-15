@@ -3,7 +3,7 @@
 # ==================================
 # Minecraft Launcher
 # ==================================# 
-mclauncherv="18101301"
+mclauncherv="18101502"
 
 #Colors
 ok="[\e[1;32m OK \e[0;39m]"
@@ -88,7 +88,7 @@ fi
 # Update Check
 # ==================================
 
-currCheck=$(($lastCheck+300))
+currCheck=$(($lastCheck+1800))
 if [ 0$(date +"%s") -gt 0$currCheck ];then
     currentmclauncherv=$(curl -fs  https://api.github.com/repos/Crysalix/PixelStart.sh/commits/pixel | grep sha | head -1 | cut --delimiter=\" -f 4)
     echo -e "$info Checking for start.sh update..."
