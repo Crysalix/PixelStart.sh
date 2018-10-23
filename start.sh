@@ -115,7 +115,18 @@ if [ -f $rootdir/server.properties ];then
     serverPort=$(grep server-port $rootdir/server.properties | cut -d= -f2)
 else
     pt_log "Can't find server.properties file. First time server started ?" 'warn'
-    serverPort='25565'
+    checkServerPort=25565
+    while [ $checkServerPort -lt 25665 ];do
+        pt_log "Trying port $checkServerPort"
+        if [ $(lsof -i:$checkServerPort -t) ];then
+            pt_log "$ok Port is used !" 'warn'
+            ((checkServerPort++))
+        else
+            serverPort=$checkServerPort
+            pt_log "Using port $serverPort" 'ok'
+            break
+        fi
+    done
 fi
 
 # Get late-bind option for delaying timeout or not.
