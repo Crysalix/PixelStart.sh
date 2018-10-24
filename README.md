@@ -75,5 +75,7 @@ Crontab : For every 5 minutes.
 $ ./start.sh stop wdoff
 ```
 ## Dependencies :
+* curl
+* lsof
 * screen
 * restart.sh file
