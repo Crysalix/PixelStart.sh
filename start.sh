@@ -67,7 +67,6 @@ mc_conf(){
 }
 
 if [ -f $rootdir/.start.conf ];then
-    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Load configuration file."
     source $rootdir/.start.conf
 else
     screen='mcserver'
