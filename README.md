@@ -34,6 +34,10 @@ Showing some status.
 ```bash
 $ ./start.sh status
 ```
+Get the status code from check function.
+```bash
+$ ./start.sh check
+```
 Send save-off to server (and save-all) and disable sending `save-all` with `start.sh input`.
 ```bash
 $ ./start.sh saveoff
