@@ -34,15 +34,15 @@ Showing some status.
 ```bash
 $ ./start.sh status
 ```
-Send save-off to server (and save-all).
+Send save-off to server (and save-all) and disable sending `save-all` with `start.sh input`.
 ```bash
 $ ./start.sh saveoff
 ```
-Send save-on to server.
+Send save-on to server and enable sending `save-all` with `start.sh input`.
 ```bash
 $ ./start.sh saveon
 ```
-When you use crontab to send regularly a save-all command, using saveoff deny sending "save-all" command, usefull when running backups. (./start.sh input save-all)
+When you use crontab to send regularly a save-all command, using saveoff deny sending "save-all" command, usefull when running backups.
 
 ### Watchdog commands :
 #### Used with crontab, this script can automatically restart your server when it crashed.
@@ -70,12 +70,8 @@ Crontab : For every 5 minutes.
 ```
 */5 * * * * bash /path/to/server/start.sh wdcheck
 ```
-#### Also you can combine those commands. Example below, for stop the server AND stop watchdog monitoring.
-```bash
-$ ./start.sh stop wdoff
-```
 ## Dependencies :
 * curl
 * lsof
 * screen
-* restart.sh file
+* restart.sh file (created by script if missing)

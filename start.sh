@@ -3,7 +3,7 @@
 # ==================================
 # Minecraft Launcher
 # ==================================
-# mclauncherv="18101503"
+# mclauncherv="18112001"
 
 #Colors
 ok="[\e[1;32m OK \e[0;39m]"
@@ -175,9 +175,7 @@ mc_start(){
             echo -e "Done"
             lsof -i:$serverPort -t > $rootdir/.start.pid
             pt_log "Server started with PID : $(cat .start.pid)" 'info'
-            if [ $1 ] && [ $1 = 'wdon' ];then
-                wd_on
-            fi
+            wd_on
         else
             echo -e "."
             pt_log 'Server fail at boot ? Timeout after $timeout sec' 'warn'
@@ -193,9 +191,7 @@ mc_start(){
 
 mc_stop(){
     pt_log 'Init server stop.'
-    if [ $1 ] && [ $1 = 'wdoff' ];then
-        wd_off
-    fi
+    wd_off
     if [ $(mc_check) -ge 14 ];then
         echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Sending save-all & stop command."
         screen -p 0 -S $screen -X stuff "save-all$(printf \\r)"
