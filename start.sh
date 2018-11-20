@@ -88,19 +88,19 @@ fi
 # Update Check
 # ==================================
 
-currCheck=$(($lastCheck+1800))
+currCheck=$(($lastCheck+3600))
 if [ 0$(date +"%s") -gt 0$currCheck ];then
     currentmclauncherv=$(curl -fs  https://api.github.com/repos/Crysalix/PixelStart.sh/commits/master | grep sha | head -1 | cut --delimiter=\" -f 4)
-    echo -e "$info Checking for start.sh update..."
+    echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Checking for start.sh update..."
     if [ "$currentmclauncherv" != "$lastSHA" ]; then
         lastCheck=$(date +"%s")
         lastSHA=$currentmclauncherv
         mc_conf
-        echo -e "$ok New version found !"
+        echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $ok New version found !"
         wget -O $rootdir/start.sh https://raw.githubusercontent.com/Crysalix/PixelStart.sh/master/start.sh >/dev/null 2>&1
         bash $rootdir/start.sh $0 $*&&exit 0
     else
-        echo -e "$ok No update found."
+        echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $ok No update found."
     fi
     lastCheck=$(date +"%s")
     mc_conf
@@ -324,7 +324,6 @@ mc_saveon(){
 
 mc_status(){
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] [....] Showing status..."
-    sleep 1
     echo -e "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server location :    $rootdir"
     echo -ne "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server file :        $serverfile"
     if [ -f $rootdir/$serverfile ]; then
@@ -541,6 +540,8 @@ case $1 in
         mc_saveoff;;
     status)
         mc_status;;
+    check)
+        mc_check;;
     input)
         mc_input "$@";;
     watchdog)
@@ -552,7 +553,7 @@ case $1 in
     wdoff)
         wd_off;;
     *)
-        echo -e "Usage: $0 {start|stop|restart|status|input|watchdog}"
+        echo -e "Usage: $0 {start|stop|restart|status|check|input|watchdog}"
         exit 1;;
 esac
 exit 0
