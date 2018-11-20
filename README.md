@@ -30,7 +30,7 @@ Send commands to the screen.
 ```bash
 $ ./start.sh input
 ```
-Showing some status.
+Displays server status.
 ```bash
 $ ./start.sh status
 ```
@@ -51,7 +51,7 @@ When you use crontab to send regularly a save-all command, using saveoff deny se
 ### Watchdog commands :
 #### Used with crontab, this script can automatically restart your server when it crashed.
 
-Showing watchdog status.
+Displays watchdog status.
 ```bash
 $ ./start.sh watchdog
 ```
