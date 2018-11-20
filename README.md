@@ -66,7 +66,7 @@ Desactivate monitoring
 $ ./start.sh wdoff
 ```
 
-Run this command with crontab eveny x minutes.
+Run this command with crontab every x minutes.
 ```bash
 $ ./start.sh wdcheck
 ```
@@ -76,29 +76,24 @@ Crontab : For every 5 minutes.
 ```
 ### Check function return code :
 #### Using ./start.sh check will return a status code, here is some explanation about it.
-**From 0 to 7**
-Basically, the server file was missing.
+**From 0 to 7** : Basically, the server file was missing.
 When 2, 4 or 6 is returned,it seems there is a server online.
 
-**From 8 to 9**
-The server is offline.
-(8 = no server running at specified port)
-(9 = but there is a pid file)
+**From 8 to 9** : The server is offline.
+* (8 = no server running at specified port)
+* (9 = but there is a pid file)
 
-**From 10 to 11**
-Server is running **BUT** screen session is not found. (Server out of screen, maybe false positive)
-(10 = port specified was listening)
-(11 = and there is a PID file)
+**From 10 to 11** : Server is running **BUT** screen session is not found. (Server out of screen, maybe false positive)
+* (10 = port specified was listening)
+* (11 = and there is a PID file)
 
-From 12 to 13
-Server is offline, but there is a screen session. (Can be a false positive, when server is too slow or freezing a lot)
-(12 = Screen session found, but no server was listen at specified port)
-(13 = and there is a PID file)
+**From 12 to 13** : Server is offline, but there is a screen session. (Can be a false positive, when server is too slow or freezing a lot)
+* (12 = Screen session found, but no server was listen at specified port)
+* (13 = and there is a PID file)
 
-From 14 to 15
-Server is running.
-(14 = PID file was missing.)
-(15 = PID file was found.)
+**From 14 to 15** : Server is running.
+* (14 = PID file was missing.)
+* (15 = PID file was found.)
 
 ## Dependencies :
 * curl
