@@ -118,7 +118,7 @@ else
     while [ $checkServerPort -lt 25665 ];do
         pt_log "Trying port $checkServerPort"
         if [ $(lsof -i:$checkServerPort -t) ];then
-            pt_log "$ok Port is used !" 'warn'
+            pt_log "Port is used !" 'warn'
             ((checkServerPort++))
         else
             serverPort=$checkServerPort

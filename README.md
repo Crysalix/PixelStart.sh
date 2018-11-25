@@ -74,8 +74,8 @@ Crontab : For every 5 minutes.
 ```
 */5 * * * * bash /path/to/server/start.sh wdcheck
 ```
-### Check function return code :
-#### Using ./start.sh check will return a status code, here is some explanation about it.
+## Check function return code :
+### Using ./start.sh check will return a status code, here is some explanation about it.
 **From 0 to 7** : Basically, the server file was missing.
 When 2, 4 or 6 is returned,it seems there is a server online.
 
