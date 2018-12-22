@@ -295,7 +295,6 @@ mc_saveoff(){
     if [ $(mc_check) -ge 14 ];then
         saves='false'
         mc_conf
-        screen -p 0 -S $screen -X stuff "tellraw @a [\"\",{\"text\":\"[Système]\",\"color\":\"gold\"},{\"text\":\" Désactivation des sauvegardes des mondes !\",\"color\":\"aqua\"}]$(printf \\r)"
         screen -p 0 -S $screen -X stuff "save-off$(printf \\r)"
         screen -p 0 -S $screen -X stuff "save-all$(printf \\r)"
         pt_log 'Suspending saves.' 'ok'
@@ -312,7 +311,6 @@ mc_saveon(){
         saves='true'
         mc_conf
         screen -p 0 -S $screen -X stuff "save-on$(printf \\r)"
-        screen -p 0 -S $screen -X stuff "tellraw @a [\"\",{\"text\":\"[Système]\",\"color\":\"gold\"},{\"text\":\" Réactivation des sauvegardes des mondes !\",\"color\":\"aqua\"}]$(printf \\r)"
         pt_log 'Re-enabling saves.' 'ok'
     else
         pt_log "Can't re-enabling saves, server is offline !" 'fail'
