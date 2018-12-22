@@ -117,7 +117,7 @@ else
     checkServerPort=25565
     while [ $checkServerPort -lt 25665 ];do
         pt_log "Trying port $checkServerPort"
-        if [ $(lsof -i:$checkServerPort -t) ];then
+        if [ "$(lsof -i:$checkServerPort -t)" ];then
             pt_log "Port is used !" 'warn'
             ((checkServerPort++))
         else
@@ -162,7 +162,7 @@ mc_start(){
         screen -dmSU $screen java -Xms$MMIN -Xmx$MMAX -jar $rootdir/$serverfile --log-strip-color nogui
         count=0
         until [ $count -gt $timeout ];do
-            if [ -z $(lsof -i:$serverPort -t) ];then
+            if [ -z "$(lsof -i:$serverPort -t)" ];then
                 echo -n "."
                 sleep 1
                 ((count++))
@@ -338,7 +338,7 @@ mc_status(){
         echo -e " $warn Screen not found !"
     fi
     echo -en "[$(date +%H:%M:%S' '%d/%m/%y)] $info Server port :        $serverPort"
-    if [ $(lsof -i:$serverPort -t) ];then
+    if [ "$(lsof -i:$serverPort -t)" ];then
         echo -e " $ok Server is listen."
         status=0
     else
@@ -392,7 +392,7 @@ mc_check(){
     then
         ((check+=4))
     fi
-    if [ $(lsof -i:$serverPort -t) ];then
+    if [ "$(lsof -i:$serverPort -t)" ];then
         ((check+=2))
     fi
     if [ -f $rootdir/.start.pid ];then
@@ -477,7 +477,7 @@ wd_check(){
         then
             ((check+=4))
         fi
-        if [ $(lsof -i:$serverPort -t) ];then
+        if [ "$(lsof -i:$serverPort -t)" ];then
             ((check+=2))
         fi
         if [ -f $rootdir/.start.pid ];then
